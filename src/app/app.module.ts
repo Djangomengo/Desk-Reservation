@@ -8,7 +8,6 @@ import {getDatabaseConfig} from "./shared/database/database.config";
 
 @Module({
   imports: [
-      TypeOrmModule.forRoot(),
       TypeOrmModule.forRootAsync({
           imports: [ConfigModule],
           inject: [ConfigService],

@@ -16,7 +16,6 @@ export const  getDatabaseConfig = (configService: ConfigService): TypeOrmModuleO
     // Derzeit befinden sich alle Entitäten in 'shared/modules'.
     // Der Pfad `'/shared/modules/**/*.entity{.ts,.js}'` sorgt dafür, dass TypeORM gezielt in diesem Verzeichnis sucht.
     // Wenn du in der Zukunft Entitäten in anderen Ordnern hinzufügst, musst du diesen Pfad hier aktualisieren.
-    entities: [__dirname + '/shared/modules/**/*.entity{.ts,.js}']
-})
+    entities: [__dirname + '/../../shared/modules/**/*.entity{.ts,.js}']})
 
 //DATENBANK AUFBAUEN UND VERBINDEN

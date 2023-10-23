@@ -14,7 +14,7 @@ export class AuthEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne (() => user => UserEntity)
+    @OneToOne (()=> UserEntity)
     @JoinColumn ()
     user: UserEntity;
 
