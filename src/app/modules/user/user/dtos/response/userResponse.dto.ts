@@ -1,3 +1,3 @@
 export class UserResponseDto {
-    username: string
+    user: any;  // Define the type based on your data.
 }

@@ -13,7 +13,7 @@ export class UserEntity {
     lastName: string
 
     @Column()
-    username: string
+    userName: string
 
     @Column()
     email: string

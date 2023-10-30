@@ -11,7 +11,6 @@ export const  getDatabaseConfig = (configService: ConfigService): TypeOrmModuleO
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    synchronize: true,
 
     // ERINNERUNG:
     // Derzeit befinden sich alle Entitäten in 'shared/modules'.
