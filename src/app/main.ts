@@ -3,11 +3,14 @@ import { AppModule } from './app.module';
 import * as process from "process";
 import { Logger } from "@nestjs/common";
 import {config} from 'dotenv'
+import {swaggerSetup} from "./shared/swagger/swagger.config";
 config()
 
 async function bootstrap() {
   const logger: Logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule)
+
+  swaggerSetup(app)
 
   const port = process.env.PORT
   await app.listen(port);
