@@ -1,6 +1,5 @@
 import {ApiProperty} from "@nestjs/swagger";
 import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
-import {Column} from "typeorm";
 
 export class CreateUserRequestDto {
 
@@ -19,15 +18,9 @@ export class CreateUserRequestDto {
     @IsNotEmpty()
     username: string;
 
-    @ApiProperty({description: 'password', required: true})
-    @IsString()
-    @IsNotEmpty()
-    password: string;
-
     @ApiProperty({description: 'email', required: true})
     @IsString()
     @IsNotEmpty()
     @IsEmail()
     email: string;
 }
-

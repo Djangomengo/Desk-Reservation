@@ -1,11 +1,20 @@
-import {Body, Controller, Get, HttpException, HttpStatus, NotFoundException, Param, Post, Res} from '@nestjs/common';
+import {
+    Body,
+    ConflictException,
+    Controller, Delete,
+    Get,
+    HttpException,
+    HttpStatus,
+    NotFoundException,
+    Param,
+    Post,
+} from '@nestjs/common';
 import {UserService} from "./user.service";
 import {UserListResponseDto} from "./dtos/response/userListResponseDto";
-import {ApiBody, ApiOkResponse} from "@nestjs/swagger";
-import {CreateUserRequestDto} from "./dtos/request/createUser.dto";
+import {ApiAcceptedResponse, ApiOperation} from "@nestjs/swagger";
+import {CreateUserRequestDto} from "./dtos/request/createUserRequest.dto";
 import {UserResponseDto} from "./dtos/response/userResponse.dto";
-import {response} from "express";
-import {UserFetchRequestDto} from "./dtos/request/fetchUser.dto";
+import {UpdateUserRequestDto} from "./dtos/request/updateUserRequest.dto";
 
 @Controller('users')
 export class UserController {
@@ -13,33 +22,82 @@ export class UserController {
         private readonly userService: UserService
     ) {}
 
+    @ApiOperation({
+        description: 'Fetch all users'
+    })
     @Get()
-    @ApiOkResponse({description: 'Successfully Fetched'})
-    async fatchAll(): Promise<UserListResponseDto> {
-        return this.userService.fatchAll();
+    async fetchAll(): Promise<UserListResponseDto> {
+        try{
+            return this.userService.fetchAll();
+        }catch (error){
+            if(error instanceof NotFoundException){
+                throw error;
+            }
+        }
+        throw new NotFoundException({response: 'failed to fetch users'})
     }
 
-    @ApiOkResponse({description: 'Successfully Fetched'})
     @Get('id/:id')
-    async fetchUserByID(@Param('id') id: number): Promise<UserResponseDto> {
-        return await this.userService.fetchUserById(id)
-            .catch(error => {
-                if (error.message === 'User not found') {
-                    throw new HttpException({ response: 'User not found'}, HttpStatus.NOT_FOUND );
-                } else {
-                    throw new HttpException({ response: 'Failed to find user'}, HttpStatus.INTERNAL_SERVER_ERROR );
-                }
-            });
-    }//????
+    @ApiOperation({
+        summary: 'Find by id'
+    })
+    async findUserById(@Param('id') id: number): Promise<UserResponseDto> {
+        try {
+            return await this.userService.findUserById(id);
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                throw error;
+            }
+            throw new HttpException({ response: 'Failed to find user' }, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-
-    #userControler
-    @Post()
-    @ApiOkResponse({description: 'User created successfully',})  //<------ wäre hier type: CreateUserRequestDto ok ?
+    @Post('create')
+    @ApiOperation({
+        summary: 'Create user'
+    })
     async createUser(@Body() createUserRequestDto: CreateUserRequestDto): Promise<UserResponseDto> {
-        return await this.userService.createUser(createUserRequestDto)
-            .catch(error => {
-                throw new HttpException('Failed to create user', HttpStatus.INTERNAL_SERVER_ERROR)
-            });
+        try{
+            await this.userService.createUser(createUserRequestDto)
+            return { message: 'User created successfully' };
+        }catch (error) {
+            if(error instanceof ConflictException){
+                throw error
+            }
+            throw new ConflictException({response: 'Email already used'})
+        }
+    }
+
+    @Post('update/:id')
+    @ApiOperation({
+        summary: 'Update user'
+    })
+    async updateUser(@Param('id') id: number ,@Body() updateUserRequestDto: UpdateUserRequestDto): Promise<UserResponseDto>{
+        try{
+            await this.userService.updateUser(updateUserRequestDto,id)
+            return {message: 'User updated successfully'}
+        }catch (error){
+            if(error instanceof NotFoundException)
+                throw error
+        }
+        throw new NotFoundException({response: 'User dose not exist with the provided id'})
+    }
+
+    @Delete('delete/:id')
+    @ApiOperation({
+        summary: 'Delete user'
+    })
+    async deleteUser(@Param('id') id: number): Promise<UserResponseDto>{
+        try {
+            await this.userService.deleteUser(id)
+            return {
+                message: 'Successfully deleted user'
+            }
+        }catch (error) {
+            if(error instanceof NotFoundException){
+                throw error
+            }
+        }
+        throw new NotFoundException({response: 'User dose not exist with the provided id'})
     }
 }

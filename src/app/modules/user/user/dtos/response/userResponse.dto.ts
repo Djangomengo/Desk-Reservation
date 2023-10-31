@@ -1,3 +1,13 @@
+import {Expose} from "class-transformer";
+
 export class UserResponseDto {
-    username: string
+
+    @Expose()
+    readonly message?: string;
+
+    @Expose()
+    username?: string;
+
+    @Expose()
+    id?: string;
 }
