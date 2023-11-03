@@ -10,7 +10,6 @@ import {
     Post,
 } from '@nestjs/common';
 import {UserService} from "./user.service";
-import {UserListResponseDto} from "./dtos/response/userListResponseDto";
 import { ApiOperation} from "@nestjs/swagger";
 import {UserResponseDto} from "./dtos/response/userResponse.dto";
 import {CreateUserRequestDto} from "./dtos/request/createUserRequest.dto";
@@ -39,6 +38,15 @@ export class UserController {
     async findUserById(@Param('id') id: number): Promise<UserResponseDto> {
         const entity: UserEntity = await this.userService.findUserById(id);
         return entity.toDto();
+    }
+
+    @Post('create')
+    @ApiOperation({
+        summary: 'Create user'
+    })
+    async createUser(@Body() createUserRequestDto: CreateUserRequestDto): Promise<UserResponseDto> {
+        const entity: UserEntity = await this.userService.createUser(createUserRequestDto)
+        return entity.toDto()
     }
 
     @Post('update/:id')

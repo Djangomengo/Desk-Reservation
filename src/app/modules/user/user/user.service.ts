@@ -1,11 +1,8 @@
 import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
 import {UserRepository} from "../../../shared/modules/user/user-repository";
-import {UserListResponseDto} from "./dtos/response/userListResponseDto";
 import {UserEntity} from "../../../shared/modules/user/user.entity";
-import {UserResponseDto} from "./dtos/response/userResponse.dto";
 import {UpdateUserRequestDto} from "./dtos/request/updateUserRequest.dto";
 import {Logger} from "@nestjs/common";
-import { plainToClass } from "class-transformer";
 import {CreateUserRequestDto} from "./dtos/request/createUserRequest.dto";
 
 // Logger auf die klasse und nicht in jeder methode einzeln

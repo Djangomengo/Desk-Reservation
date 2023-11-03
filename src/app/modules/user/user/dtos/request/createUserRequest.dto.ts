@@ -18,6 +18,11 @@ export class CreateUserRequestDto {
     @IsNotEmpty()
     username: string;
 
+    @ApiProperty({description: 'first name', required: true})
+    @IsString()
+    @IsNotEmpty()
+    password: string;
+
     @ApiProperty({description: 'email', required: true})
     @IsString()
     @IsNotEmpty()

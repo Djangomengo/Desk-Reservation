@@ -9,16 +9,19 @@ export class UserEntity {
     id: number;
 
     @Column()
-    firstName: string
+    firstName: string;
 
     @Column()
-    lastName: string
+    lastName: string;
 
     @Column()
-    username: string
+    username: string;
 
     @Column()
-    email: string
+    password: string;
+
+    @Column()
+    email: string;
 
     toDto(): UserResponseDto{
         return plainToClass(UserResponseDto,this, {

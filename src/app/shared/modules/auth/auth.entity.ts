@@ -28,7 +28,7 @@ export class AuthEntity {
     lastLogin: Date;
 
     @CreateDateColumn()
-    createtAt: Date;
+    createdAt: Date;
 
     @UpdateDateColumn()
     updatedAt: Date;
