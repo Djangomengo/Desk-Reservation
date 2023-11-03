@@ -1,4 +1,6 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {UserResponseDto} from "../../../modules/user/user/dtos/response/userResponse.dto";
+import {plainToClass} from "class-transformer";
 
 @Entity('users')
 export class UserEntity {
@@ -17,4 +19,10 @@ export class UserEntity {
 
     @Column()
     email: string
+
+    toDto(): UserResponseDto{
+        return plainToClass(UserResponseDto,this, {
+            excludeExtraneousValues: true
+        });
+    }
 }

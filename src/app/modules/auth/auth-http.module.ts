@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import {PasswordService} from "../password/password.service";
 
-@Module({})
+@Module({
+    imports: [PasswordService]
+})
 export class AuthHttpModule {}

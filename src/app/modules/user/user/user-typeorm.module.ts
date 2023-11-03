@@ -10,4 +10,4 @@ import {UserRepository} from "../../../shared/modules/user/user-repository";
     providers: [UserRepository],
     exports: [UserRepository]
 })
-export class UserTypeOrmModule {}
+export class UserTypeormModule {}
