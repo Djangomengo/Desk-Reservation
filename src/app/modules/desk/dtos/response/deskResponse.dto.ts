@@ -1,3 +1,12 @@
+import {Expose} from "class-transformer";
+
 export class DeskResponseDto {
-    desk: any;  // Define the type based on your data.
+    @Expose()
+    id?: number;
+
+    @Expose()
+    taken?: boolean;
+
+    @Expose()
+    message?: string;
 }

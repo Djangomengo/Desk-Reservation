@@ -1,8 +1,7 @@
-import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
-import {UserRepository} from "../../../shared/modules/user/user-repository";
+import {ConflictException, Injectable, Logger, NotFoundException} from '@nestjs/common';
+import {UserRepository} from "../../../shared/modules/user/user.repository";
 import {UserEntity} from "../../../shared/modules/user/user.entity";
 import {UpdateUserRequestDto} from "./dtos/request/updateUserRequest.dto";
-import {Logger} from "@nestjs/common";
 import {CreateUserRequestDto} from "./dtos/request/createUserRequest.dto";
 import {PasswordService} from "../../password/password.service";
 
@@ -14,8 +13,7 @@ export class UserService {
         private readonly passwordService: PasswordService) {}
 
     async fetchAll(): Promise<UserEntity[]> {
-        const users: UserEntity[] = await this.userRepository.fetchAll();
-        return users;
+        return await this.userRepository.fetchAll();
     }
 
 

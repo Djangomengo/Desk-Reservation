@@ -6,6 +6,7 @@ import {ConfigModule, ConfigService} from "@nestjs/config";
 import {getDatabaseConfig} from "./shared/database/database.config";
 import {UserHttpModule} from "./modules/user/user/user-http.module";
 import {AuthHttpModule} from "./modules/auth/auth-http.module";
+import {DeskHttpModule} from "./modules/desk/desk-http.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import {AuthHttpModule} from "./modules/auth/auth-http.module";
       }),
       UserHttpModule,
       AuthHttpModule,
+      DeskHttpModule
   ],
   controllers: [AppController],
   providers: [AppService],

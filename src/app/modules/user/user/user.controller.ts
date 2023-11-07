@@ -45,6 +45,7 @@ export class UserController {
     @ApiOperation({
         summary: 'Create user'
     })
+
     @ApiBody({type: CreateUserRequestDto})
     async createUser(@Body() createUserRequestDto: CreateUserRequestDto): Promise<UserResponseDto> {
         createUserRequestDto.email = createUserRequestDto.email.toLowerCase()
