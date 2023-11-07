@@ -1,4 +1,9 @@
+import {ApiProperty} from "@nestjs/swagger";
+
 export class LoginRequestDto {
-    username: string;
+    @ApiProperty({description: 'email', required: true})
+    email: string;
+
+    @ApiProperty({description: 'password', required: true})
     password: string;
 }

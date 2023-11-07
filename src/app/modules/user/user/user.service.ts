@@ -4,18 +4,18 @@ import {UserEntity} from "../../../shared/modules/user/user.entity";
 import {UpdateUserRequestDto} from "./dtos/request/updateUserRequest.dto";
 import {Logger} from "@nestjs/common";
 import {CreateUserRequestDto} from "./dtos/request/createUserRequest.dto";
-
-// Logger auf die klasse und nicht in jeder methode einzeln
+import {PasswordService} from "../../password/password.service";
 
 @Injectable()
 export class UserService {
     private logger: Logger = new Logger(UserService.name);
-    constructor(private readonly userRepository: UserRepository) {}
+    constructor(
+        private readonly userRepository: UserRepository,
+        private readonly passwordService: PasswordService) {}
 
     async fetchAll(): Promise<UserEntity[]> {
         const users: UserEntity[] = await this.userRepository.fetchAll();
         return users;
-
     }
 
 
@@ -34,7 +34,6 @@ export class UserService {
             this.logger.error(`Attempted to fetch a user with email: ${email} that does not exist in database.`)
             throw new NotFoundException()
         }
-        this.logger.verbose(`response with email: ${user.email} and username: ${user.username}`)
         return user;
     }
 
@@ -44,11 +43,14 @@ export class UserService {
             this.logger.error(`Failed to create new user. Email: "${createUserRequestDto.email}" already exists in database.`)
             throw new ConflictException('User already exist with the provided email address')
         }
+        createUserRequestDto.password = await this.passwordService.hashPassword(createUserRequestDto.password)
         const user: UserEntity = await this.userRepository.createUser(createUserRequestDto)
-        this.logger.verbose(`Success: User: "${user.username}" was created successfully.`);
+        this.logger.verbose(`Success: User: "${user.username}" was created successful
+         ly.`);
         return user;
     }
 
+    //IN SERVICE: check if ID matches: restrict to own data only if true
     async updateUser(updateUserDto: UpdateUserRequestDto, id: number): Promise<UserEntity> {
         const exist: UserEntity = await this.userRepository.findeUserById(id)
         if(!exist){
@@ -60,7 +62,7 @@ export class UserService {
         return user;
     }
 
-    async deleteUser(id: number): Promise<void>{
+    async deleteUser(id: number): Promise<UserEntity>{
         const user = await this.userRepository.findeUserById(id)
         if (!user){
             this.logger.error('Failed to delete user Please check the input data and ensure the user exists in database.')
@@ -68,6 +70,7 @@ export class UserService {
         }
         this.logger.verbose(`user with id: ${id} has been deleted`)
         await this.userRepository.deleteUser(id)
+        return user
     }
 }
 

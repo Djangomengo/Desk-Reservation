@@ -5,8 +5,4 @@ export class PasswordService{
         const saltRounds = 10
         return bcrypt.hash(password, saltRounds);
     }
-
-    async comparePassword(plainPassword: String, hashedPassword: String): Promise<boolean> {
-        return bcrypt.compare(plainPassword, hashedPassword)
-    }
 }

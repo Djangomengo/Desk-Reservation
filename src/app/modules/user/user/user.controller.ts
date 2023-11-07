@@ -1,21 +1,19 @@
 import {
     Body,
-    ConflictException,
     Controller, Delete,
     Get,
-    HttpException,
-    HttpStatus,
-    NotFoundException,
     Param,
     Post,
 } from '@nestjs/common';
 import {UserService} from "./user.service";
-import { ApiOperation} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiBody, ApiOperation, ApiTags} from "@nestjs/swagger";
 import {UserResponseDto} from "./dtos/response/userResponse.dto";
 import {CreateUserRequestDto} from "./dtos/request/createUserRequest.dto";
 import {UpdateUserRequestDto} from "./dtos/request/updateUserRequest.dto";
 import {UserEntity} from "../../../shared/modules/user/user.entity";
+import {Public} from "../../../shared/decorators/is_public.decorator";
 
+@ApiTags('user')
 @Controller('users')
 export class UserController {
     constructor(
@@ -23,15 +21,17 @@ export class UserController {
     ) {}
 
     @ApiOperation({
-        description: 'Fetch all users'
+        summary: 'Fetch all users'
     })
     @Get()
+    @ApiBearerAuth()
     async fetchAll(): Promise<UserResponseDto[]> {
         const entities: UserEntity[] = await this.userService.fetchAll();
         return entities.map(userEntity => userEntity.toDto());
     }
 
     @Get('id/:id')
+    @ApiBearerAuth()
     @ApiOperation({
         summary: 'Find by id'
     })
@@ -40,15 +40,19 @@ export class UserController {
         return entity.toDto();
     }
 
+    @Public()
     @Post('create')
     @ApiOperation({
         summary: 'Create user'
     })
+    @ApiBody({type: CreateUserRequestDto})
     async createUser(@Body() createUserRequestDto: CreateUserRequestDto): Promise<UserResponseDto> {
+        createUserRequestDto.email = createUserRequestDto.email.toLowerCase()
         const entity: UserEntity = await this.userService.createUser(createUserRequestDto)
         return entity.toDto()
     }
 
+    @ApiBearerAuth()
     @Post('update/:id')
     @ApiOperation({
         summary: 'Update user'
@@ -62,6 +66,7 @@ export class UserController {
     @ApiOperation({
         summary: 'Delete user'
     })
+    @ApiBearerAuth()
     async deleteUser(@Param('id') id: number): Promise<UserResponseDto> {
         await this.userService.deleteUser(id)
         return {

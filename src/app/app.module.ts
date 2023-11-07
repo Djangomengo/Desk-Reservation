@@ -5,6 +5,7 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import {getDatabaseConfig} from "./shared/database/database.config";
 import {UserHttpModule} from "./modules/user/user/user-http.module";
+import {AuthHttpModule} from "./modules/auth/auth-http.module";
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import {UserHttpModule} from "./modules/user/user/user-http.module";
           useFactory: (configService: ConfigService) => getDatabaseConfig(configService)
       }),
       UserHttpModule,
+      AuthHttpModule,
   ],
   controllers: [AppController],
   providers: [AppService],

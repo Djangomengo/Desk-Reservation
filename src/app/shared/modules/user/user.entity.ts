@@ -1,4 +1,4 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 import {UserResponseDto} from "../../../modules/user/user/dtos/response/userResponse.dto";
 import {plainToClass} from "class-transformer";
 
