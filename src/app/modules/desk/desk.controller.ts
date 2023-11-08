@@ -3,8 +3,7 @@ import {DeskService} from "./desk.service";
 import {ApiBearerAuth, ApiOperation, ApiTags} from "@nestjs/swagger";
 import {DeskResponseDto} from "./dtos/response/deskResponse.dto";
 import {DeskEntity} from "../../shared/modules/desk/desk.entity";
-import {UserEntity} from "../../shared/modules/user/user.entity";
-import {Public} from "../../shared/decorators/is_public.decorator";
+import {Public} from "../../shared/decorators/is-public.decorator";
 
 @ApiTags('Desk')
 @Controller('desks')

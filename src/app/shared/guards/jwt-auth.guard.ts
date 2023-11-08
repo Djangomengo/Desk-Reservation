@@ -3,7 +3,7 @@ import {JwtService} from "@nestjs/jwt";
 import {jwtConstants} from "../../modules/auth/constants";
 import {Request} from "express";
 import {Reflector} from "@nestjs/core";
-import {IS_PUBLIC_KEY} from "../decorators/is_public.decorator";
+import {IS_PUBLIC_KEY} from "../decorators/is-public.decorator";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -14,6 +14,8 @@ export class JwtAuthGuard implements CanActivate {
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean>{
+        console.log('canActivate of JwtAuthGuard');
+
         const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
             context.getHandler(),
             context.getClass()
@@ -22,7 +24,7 @@ export class JwtAuthGuard implements CanActivate {
             return true;
         }
 
-        const  request = context.switchToHttp().getRequest();
+        const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
         if(!token){
             console.log("Token in the canActivate Methode: ", token)
@@ -30,7 +32,7 @@ export class JwtAuthGuard implements CanActivate {
             throw new UnauthorizedException('token undefined');
         }
         try {
-            request['user'] = await this.jwtService.verifyAsync(
+            request.user = await this.jwtService.verifyAsync(
                 token,
                 {
                     secret: jwtConstants.secret
@@ -44,6 +46,7 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     extractTokenFromHeader(request: Request): string | undefined {
+        console.log(request);
         const [type, token] = request.headers.authorization?.split(' ') ?? [];
         return type === 'Bearer' ? token : undefined
     }

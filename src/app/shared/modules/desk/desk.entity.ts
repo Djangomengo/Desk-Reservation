@@ -1,4 +1,4 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {DeskResponseDto} from "../../../modules/desk/dtos/response/deskResponse.dto";
 import {plainToClass} from "class-transformer";
 
@@ -10,6 +10,13 @@ export class DeskEntity {
 
     @Column({default: false})
     taken: boolean
+
+    @JoinTable()
+    @ManyToOne(
+        type => DeskEntity,
+        (desk: DeskEntity) => desk.id
+    )
+    deskId: number
 
     toDto():DeskResponseDto{
         return plainToClass(DeskResponseDto, this, {

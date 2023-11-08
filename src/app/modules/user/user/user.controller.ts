@@ -11,7 +11,8 @@ import {UserResponseDto} from "./dtos/response/userResponse.dto";
 import {CreateUserRequestDto} from "./dtos/request/createUserRequest.dto";
 import {UpdateUserRequestDto} from "./dtos/request/updateUserRequest.dto";
 import {UserEntity} from "../../../shared/modules/user/user.entity";
-import {Public} from "../../../shared/decorators/is_public.decorator";
+import {Public} from "../../../shared/decorators/is-public.decorator";
+import {CurrentUserId} from "../../../shared/decorators/current-user.decorator";
 
 @ApiTags('user')
 @Controller('users')
@@ -58,7 +59,8 @@ export class UserController {
     @ApiOperation({
         summary: 'Update user'
     })
-    async updateUser(@Param('id') id: number ,@Body() updateUserRequestDto: UpdateUserRequestDto): Promise<UserResponseDto>{
+    async updateUser(@CurrentUserId() id: number,@Body() updateUserRequestDto: UpdateUserRequestDto): Promise<UserResponseDto>{
+        console.log('userid', id)
         await this.userService.updateUser(updateUserRequestDto,id)
         return {message: 'User updated successfully'}
     }
@@ -68,7 +70,7 @@ export class UserController {
         summary: 'Delete user'
     })
     @ApiBearerAuth()
-    async deleteUser(@Param('id') id: number): Promise<UserResponseDto> {
+    async deleteUser(@CurrentUserId() id: number): Promise<UserResponseDto> {
         await this.userService.deleteUser(id)
         return {
             message: 'Successfully deleted user'
