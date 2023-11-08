@@ -1,11 +1,11 @@
 import {Injectable, Logger, UnauthorizedException} from '@nestjs/common';
 import {UserService} from "../user/user/user.service";
 import {LoginRequestDto} from "./dtos/request/login.dto";
-import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import {UserEntity} from "../../shared/modules/user/user.entity";
 import {PasswordChangeRequestDto} from "./dtos/request/passwordChange.dto";
 import {PasswordService} from "../password/password.service";
+import {JwtService} from "@nestjs/jwt";
 @Injectable()
 export class AuthService {
     logger: Logger = new Logger(AuthService.name)

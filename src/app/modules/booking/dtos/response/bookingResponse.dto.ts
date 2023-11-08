@@ -1,3 +1,6 @@
+import {BookingEntity} from "../../../../shared/modules/booking/booking.entity";
+
 export class BookingResponseDto {
-    booking: any;  // Define the type based on your data.
+    booking?: BookingEntity;
+    message?: string;
 }

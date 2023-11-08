@@ -20,6 +20,4 @@ export class DeskService {
     async fetchAll(): Promise<DeskEntity[]> {
         return await this.deskRepository.fetchAll();
     }
-
-    async
 }

@@ -1,4 +1,13 @@
-import {BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {
+    BeforeInsert,
+    BeforeUpdate,
+    Column,
+    Entity,
+    JoinTable,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from "typeorm";
 import {UserResponseDto} from "../../../modules/user/user/dtos/response/userResponse.dto";
 import {plainToClass} from "class-transformer";
 
@@ -23,8 +32,7 @@ export class UserEntity {
     @Column()
     email: string;
 
-    @JoinTable()
-    @ManyToOne(
+    @OneToMany(
         type => UserEntity,
         (user) => user.id
     )

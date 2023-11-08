@@ -1,4 +1,4 @@
-import {Column, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {DeskResponseDto} from "../../../modules/desk/dtos/response/deskResponse.dto";
 import {plainToClass} from "class-transformer";
 
@@ -11,8 +11,7 @@ export class DeskEntity {
     @Column({default: false})
     taken: boolean
 
-    @JoinTable()
-    @ManyToOne(
+    @OneToMany(
         type => DeskEntity,
         (desk: DeskEntity) => desk.id
     )

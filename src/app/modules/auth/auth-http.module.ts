@@ -5,8 +5,8 @@ import {UserService} from "../user/user/user.service";
 import {AuthController} from "./auth.controller";
 import {AuthService} from "./auth.service";
 import {UserTypeormModule} from "../user/user/user-typeorm.module";
-import {JwtModule} from "@nestjs/jwt";
 import {jwtConstants} from "./constants";
+import {JwtModule} from "@nestjs/jwt";
 
 @Module({
     imports: [
