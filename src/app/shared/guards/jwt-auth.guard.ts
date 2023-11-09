@@ -14,8 +14,7 @@ export class JwtAuthGuard implements CanActivate {
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean>{
-        console.log('canActivate of JwtAuthGuard');
-
+        this.logger.verbose('canActivate run')
         const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
             context.getHandler(),
             context.getClass()
@@ -46,8 +45,8 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     extractTokenFromHeader(request: Request): string | undefined {
-        console.log(request);
         const [type, token] = request.headers.authorization?.split(' ') ?? [];
+
         return type === 'Bearer' ? token : undefined
     }
 

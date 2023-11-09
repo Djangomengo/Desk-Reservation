@@ -1,9 +1,10 @@
-import {Controller, Get, Post} from '@nestjs/common';
+import {Controller, Get, Post, UseGuards} from '@nestjs/common';
 import {DeskService} from "./desk.service";
 import {ApiBearerAuth, ApiOperation, ApiTags} from "@nestjs/swagger";
 import {DeskResponseDto} from "./dtos/response/deskResponse.dto";
 import {DeskEntity} from "../../shared/modules/desk/desk.entity";
 import {Public} from "../../shared/decorators/is-public.decorator";
+import {JwtAuthGuard} from "../../shared/guards/jwt-auth.guard";
 
 @ApiTags('Desk')
 @Controller('desks')
@@ -12,11 +13,12 @@ export class DeskController {
         private readonly deskService: DeskService
     ) {}
 
+    @Post('create')
     @ApiOperation({
         summary: 'create a table'
     })
+    @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
-    @Post('create')
     async createDesk(): Promise<DeskResponseDto> {
         await this.deskService.createDesk()
         return {
@@ -24,12 +26,13 @@ export class DeskController {
         }
     }
 
+    @Get()
     @ApiOperation({
         summary: 'fetch all desks'
     })
     @Public()
-    //@ApiBearerAuth()
-    @Get()
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth()
     async fetchAll(): Promise<DeskResponseDto[]> {
         const desks: DeskEntity[] = await this.deskService.fetchAll()
         return desks.map(deskEntity => deskEntity.toDto())

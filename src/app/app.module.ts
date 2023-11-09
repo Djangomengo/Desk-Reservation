@@ -8,6 +8,8 @@ import {UserHttpModule} from "./modules/user/user/user-http.module";
 import {AuthHttpModule} from "./modules/auth/auth-http.module";
 import {DeskHttpModule} from "./modules/desk/desk-http.module";
 import {BookingHttpModule} from "./modules/booking/booking-http.module";
+import {APP_GUARD} from "@nestjs/core";
+import {JwtAuthGuard} from "./shared/guards/jwt-auth.guard";
 
 @Module({
   imports: [

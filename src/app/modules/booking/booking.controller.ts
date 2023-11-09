@@ -16,9 +16,9 @@ export class BookingController {
     summary: `create a booking`,
   })
   @ApiBody({ type: CreateBookingRequestDto })
-  async createBooking(@CurrentUser() user: UserEntity, @Body() createBookingRequestDto: CreateBookingRequestDto): Promise<BookingResponseDto> {
-      console.log(`User Id: ${user.id}`)
-      createBookingRequestDto.userId = user.id
+  async createBooking(@CurrentUser() currentUser: UserEntity, @Body() createBookingRequestDto: CreateBookingRequestDto): Promise<BookingResponseDto> {
+      console.log(`User Id: ${currentUser.id}`)
+      createBookingRequestDto.userId = currentUser.id
       await this.bookingService.createBooking(createBookingRequestDto)
       return {
           message: `booking Created`

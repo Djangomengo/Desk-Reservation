@@ -30,7 +30,7 @@ export class AuthService {
 
         const payload = {username: user.username, id: user.id}
         const accessToken: string = await this.jwtService.signAsync(payload)
-        //this.logger.verbose(`accessToken: Accepted!`)
+        this.logger.verbose(`accessToken: Accepted!`)
         this.logger.verbose(`token: \n ${accessToken}`)
         return { accessToken }
     }
