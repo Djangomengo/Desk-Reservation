@@ -76,7 +76,6 @@ export class UserController {
     })
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
-    //@UseGuards(JwtAuthGuard)
     async deleteUser(@CurrentUser() currentUser: UserEntity/*@CurrentUser() user: UserEntity*/): Promise<UserResponseDto> {
         await this.userService.deleteUser(currentUser.id)
         return {

@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import {UserResponseDto} from "../../../modules/user/user/dtos/response/userResponse.dto";
 import {plainToClass} from "class-transformer";
+import {BookingEntity} from "../booking/booking.entity";
 
 @Entity('users')
 export class UserEntity {
@@ -32,11 +33,9 @@ export class UserEntity {
     @Column()
     email: string;
 
-    @OneToMany(
-        type => UserEntity,
-        (user) => user.id
-    )
-    userId: number
+    @OneToMany(() => BookingEntity, booking => booking.user)
+    bookings: BookingEntity[];
+
 
 
     toDto(): UserResponseDto{

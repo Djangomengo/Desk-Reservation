@@ -26,15 +26,15 @@ export class DeskController {
         }
     }
 
-    @Get()
+    @Get('desks')
     @ApiOperation({
-        summary: 'fetch all desks'
+        summary: 'fetch all free desks'
     })
     @Public()
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
-    async fetchAll(): Promise<DeskResponseDto[]> {
-        const desks: DeskEntity[] = await this.deskService.fetchAll()
+    async fetchFreeDesks(): Promise<DeskResponseDto[]> {
+        const desks: DeskEntity[] = await this.deskService.fetchFreeDesks()
         return desks.map(deskEntity => deskEntity.toDto())
     }
 }

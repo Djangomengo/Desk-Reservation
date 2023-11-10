@@ -1,25 +1,32 @@
-import {Body, Controller, Post,} from '@nestjs/common';
-import {ApiBody, ApiOperation, ApiTags} from "@nestjs/swagger";
+import {Body, Controller, Logger, Post, UseGuards,} from '@nestjs/common';
+import {ApiBearerAuth, ApiBody, ApiOperation, ApiTags} from "@nestjs/swagger";
 import {BookingService} from "./booking.service";
 import {CreateBookingRequestDto} from "./dtos/request/createBooking.dto";
 import {BookingResponseDto} from "./dtos/response/bookingResponse.dto";
 import {CurrentUser} from "../../shared/decorators/current-user.decorator";
 import {UserEntity} from "../../shared/modules/user/user.entity";
+import {JwtAuthGuard} from "../../shared/guards/jwt-auth.guard";
+import {SetDeskAsTakenDto} from "../desk/dtos/request/set-desk-as-taken.dto";
 
 @ApiTags(`booking`)
 @Controller('bookings')
 export class BookingController {
-  constructor(private readonly bookingService: BookingService) {}
+    private logger = new Logger(BookingService.name)
+
+    constructor(private readonly bookingService: BookingService) {}
 
   @Post(`creat`)
   @ApiOperation({
     summary: `create a booking`,
   })
   @ApiBody({ type: CreateBookingRequestDto })
-  async createBooking(@CurrentUser() currentUser: UserEntity, @Body() createBookingRequestDto: CreateBookingRequestDto): Promise<BookingResponseDto> {
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async createBooking(@CurrentUser() currentUser: UserEntity, @Body() createBookingRequestDto: CreateBookingRequestDto, setDeskAsTakenDto: SetDeskAsTakenDto): Promise<BookingResponseDto> {
       console.log(`User Id: ${currentUser.id}`)
       createBookingRequestDto.userId = currentUser.id
-      await this.bookingService.createBooking(createBookingRequestDto)
+
+      await this.bookingService.createBooking(createBookingRequestDto, setDeskAsTakenDto)
       return {
           message: `booking Created`
       }

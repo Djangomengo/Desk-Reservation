@@ -2,6 +2,7 @@ import {Injectable} from "@nestjs/common";
 import {EntityManager, Repository} from "typeorm";
 import {DeskEntity} from "./desk.entity";
 import {InjectRepository} from "@nestjs/typeorm";
+import {SetDeskAsTakenDto} from "../../../modules/desk/dtos/request/set-desk-as-taken.dto";
 
 @Injectable()
 export class DeskRepository extends Repository<DeskEntity>{
@@ -18,8 +19,19 @@ export class DeskRepository extends Repository<DeskEntity>{
         return this.deskRepository.save(desk)
     }
 
-    async fetchAll(): Promise<DeskEntity[]> {
-        return this.deskRepository.find()
+    async fetchFreeDesks(): Promise<DeskEntity[]> {
+        return this.deskRepository.find({
+            where:{
+                taken: false
+            }})
     }
 
+    async setDeskAsTaken(setDeskAsTakenDto: SetDeskAsTakenDto, id: number): Promise<void> {
+        await takenToTrue
+            .createQueryBuilder()
+            .update(DeskEntity)
+            .set({taken: true})
+            .where
+            .
+    }
 }

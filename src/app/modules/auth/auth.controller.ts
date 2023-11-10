@@ -37,7 +37,6 @@ export class AuthController {
     @ApiBody({type: PasswordChangeRequestDto})
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
-    //@UseGuards(JwtAuthGuard)
     async changePassword(@CurrentUser() currentUser: UserEntity, @Body() passwordChangeRequestDto: PasswordChangeRequestDto): Promise<AuthResponseDto> {
         await this.authService.changePassword(passwordChangeRequestDto, currentUser.id)
         return {message: 'Password successfully changed'}
@@ -47,8 +46,7 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     async test (@CurrentUser() currentUser: UserEntity): Promise<void>{
-        const currentUsersId: number = await currentUser.id
-        console.log(`id in der test methode: ${currentUsersId}`)
+        console.log(`id in der test methode: ${currentUser.id}`)
     }
 }
 

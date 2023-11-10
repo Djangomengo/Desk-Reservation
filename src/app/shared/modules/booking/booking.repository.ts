@@ -26,7 +26,6 @@ export class BookingRepository extends Repository<BookingEntity> {
         return await this.bookingRepository.findOne({
             where:
                 {
-                    userId: createBookingRequestDto.userId,
                     day: createBookingRequestDto.day,
                     deskId: createBookingRequestDto.deskId
                 }

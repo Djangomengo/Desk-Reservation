@@ -5,8 +5,7 @@ export const CurrentUser = createParamDecorator(
 
         const request = ctx.switchToHttp().getRequest();
         Logger.verbose(`id @CurrentUser decorator: ${request.user.id}`)
-        //console.log(`id: in decorator`,request)
-        return request.user.id;
+        return request.user;
     }
 )
 
