@@ -14,7 +14,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @ApiOperation({ summary: 'login', description: `login` })
-  @Post('login')
+  @Post()
   @ApiBody({ type: LoginRequestDto })
   async login(@Body() dto: LoginRequestDto): Promise<LoginResponseDto> {
     return {

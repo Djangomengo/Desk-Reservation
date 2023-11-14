@@ -36,7 +36,6 @@ export class UserController {
   }
 
   @Get(':id')
-  //@UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: 'Find by id',
   })
@@ -56,10 +55,10 @@ export class UserController {
   })
   @ApiBody({ type: UserRequestDto })
   async createUser(
-    @Body() createUserRequestDto: UserRequestDto,
+    @Body() dto: UserRequestDto,
   ): Promise<UserResponseDto> {
     const entity: UserEntity =
-      await this.userService.createUser(createUserRequestDto);
+      await this.userService.createUser(dto);
     return entity.toDto();
   }
 
@@ -72,11 +71,10 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   async updateUser(
     @CurrentUser() currentUser: UserEntity,
-    @Body() updateUserRequestDto: UpdateUserRequestDto,
+    @Body() dto: UpdateUserRequestDto,
   ): Promise<UserResponseDto> {
     const entity: UserEntity = await this.userService.updateUser(
-      updateUserRequestDto,
-
+      dto,
       currentUser.id,
     );
     return entity.toDto();
@@ -89,8 +87,9 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   async deleteUser(
-    @CurrentUser() currentUser: UserEntity /*@CurrentUser() user: UserEntity*/,
-  ): Promise<void> {
+    @CurrentUser() currentUser: UserEntity,
+  ): Promise<string> {
     await this.userService.deleteUser(currentUser.id);
+    return 'successfully deleted'
   }
 }

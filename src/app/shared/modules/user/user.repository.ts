@@ -15,9 +15,6 @@ export class UserRepository extends Repository<UserEntity> {
     super(UserEntity, entityManager);
   }
 
-  async fetchAll(): Promise<UserEntity[]> {
-    return this.userRepository.find();
-  }
   async findUserById(id: number): Promise<UserEntity> {
     return await this.userRepository.findOne({
       where:
@@ -35,25 +32,4 @@ export class UserRepository extends Repository<UserEntity> {
       .getOne();
   }
 
-  async createUser(dto: UserRequestDto): Promise<UserEntity> {
-    const user: UserEntity = this.userRepository.create(dto);
-    return await this.userRepository.save(user);
-  }
-
-  async updateUser(
-      dto: UpdateUserRequestDto,
-      id: number,
-  ): Promise<UserEntity> {
-    await this.userRepository.update(id, dto);
-    return this.userRepository.findOne({
-      where:
-          {
-            id: id
-          }
-    });
-  }
-
-  async deleteUser(id: number): Promise<void> {
-    await this.userRepository.delete(id);
-  }
 }

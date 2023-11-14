@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { UserRepository } from 'src/app/shared/modules/user/user.repository';
 import { UserEntity } from 'src/app/shared/modules/user/user.entity';
-import { UpdateUserRequestDto } from 'src/app/modules/user/dtos/request/update-user-request.dto';
+import { UpdateUserRequestDto } from './dtos/request/update-user-request.dto';
 import { UserRequestDto } from 'src/app/modules/user/dtos/request/user-request.dto';
 import {hashPassword} from "src/app/shared/utils/hash-password";
 
@@ -17,7 +17,7 @@ export class UserService {
   ) {}
 
   async fetchAll(): Promise<UserEntity[]> {
-    return await this.userRepository.fetchAll();
+    return await this.userRepository.find();
   }
 
   async findUserById(id: number): Promise<UserEntity> {
@@ -38,31 +38,32 @@ export class UserService {
 
   async createUser(dto: UserRequestDto): Promise<UserEntity> {
     const dtoCopy: UserRequestDto = structuredClone(dto);
-    const userExist: UserEntity = await this.userRepository.findUserByMail(dtoCopy.email);
+    const user: UserEntity = await this.userRepository.findUserByMail(dtoCopy.email);
 
-    if (userExist) {
+    if (user) {
       this.throwNotFoundException('Error in createUser Msg: mail already used');
     }
     dtoCopy.password = await hashPassword(dtoCopy.password);
-    const entity = this.userRepository.create({...dtoCopy});
+    const entity: UserEntity = this.userRepository.create({...dtoCopy});
     return this.userRepository.save(entity);
   }
 
   async updateUser( dto: UpdateUserRequestDto, id: number): Promise<UserEntity> {
     const dtoCopy: UpdateUserRequestDto = structuredClone(dto)
-    const userExist: UserEntity = await this.userRepository.findUserById(id);
-    if (!userExist) {
+    const user: UserEntity = await this.userRepository.findUserById(id);
+    if (!user) {
       this.throwNotFoundException('Error in updateUser Msg: user not found');
     }
-    return await this.userRepository.updateUser(dtoCopy, id);
+    await this.userRepository.update(id, dtoCopy);
+    return user
   }
 
   async deleteUser(id: number): Promise<void> {
-    const userExist = await this.userRepository.findUserById(id);
-    if (!userExist) {
+    const user: UserEntity = await this.userRepository.findUserById(id);
+    if (!user) {
       this.throwNotFoundException( 'Error in deleteUser Msg: user not found');
     }
-    await this.userRepository.deleteUser(id);
+    await this.userRepository.delete(id);
   }
 
   throwNotFoundException(errorMsg: string): void {

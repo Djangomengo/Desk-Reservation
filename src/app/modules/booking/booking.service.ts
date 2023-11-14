@@ -17,12 +17,14 @@ export class BookingService {
     deskId: number,
     day: WeekEnum,
   ): Promise<BookingEntity> {
-    const bookingExists: boolean =
-      await this.bookingRepository.findByDayAndDeskId(day, deskId);
-    if (bookingExists) {
+    if (await this.bookingRepository.findByDayAndDeskId(day, deskId)) {
       throw new ConflictException(`booking already exists`);
     }
-
-    return await this.bookingRepository.createBooking(userId, deskId, day);
+    const booking: BookingEntity = this.bookingRepository.create({
+      userId,
+      deskId,
+      day,
+    });
+    return await this.bookingRepository.save(booking);
   }
 }

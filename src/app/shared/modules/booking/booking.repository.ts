@@ -14,19 +14,6 @@ export class BookingRepository extends Repository<BookingEntity> {
     super(BookingEntity, entityManager);
   }
 
-  async createBooking(
-    userId: number,
-    deskId: number,
-    day: WeekEnum,
-  ): Promise<BookingEntity> {
-    const booking: BookingEntity = await this.bookingRepository.create({
-      userId,
-      deskId,
-      day,
-    });
-    return await this.bookingRepository.save(booking);
-  }
-
   async findByDayAndDeskId(day: WeekEnum, deskId: number): Promise<boolean> {
     const count = await this.count({where:
           {

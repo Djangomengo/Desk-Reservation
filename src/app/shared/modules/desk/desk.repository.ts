@@ -13,9 +13,4 @@ export class DeskRepository extends Repository<DeskEntity> {
         super(DeskEntity, entityManager);
     }
 
-    async createDesk(): Promise<DeskEntity> {
-        const desk: DeskEntity = this.deskRepository.create();
-        return this.deskRepository.save(desk);
-    }
-
 }

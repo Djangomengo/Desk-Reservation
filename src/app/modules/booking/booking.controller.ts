@@ -11,13 +11,11 @@ import { DeskRequestDto } from '../desk/dtos/request/desk-request.dto';
 @ApiTags(`booking`)
 @Controller('bookings')
 export class BookingController {
-  private logger = new Logger(BookingService.name);
-
   constructor(private readonly bookingService: BookingService) {}
 
-  @Post(`creat`)
+  @Post()
   @ApiOperation({
-    summary: `create a booking`,
+    summary: `create a reservation`,
   })
   @ApiBody({ type: CreateBookingRequestDto })
   @UseGuards(JwtAuthGuard)
