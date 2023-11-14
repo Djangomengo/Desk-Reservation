@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, EntityManager } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { CreateUserRequestDto } from '../../../modules/user/dtos/request/createUserRequest.dto';
-import { UpdateUserRequestDto } from '../../../modules/user/dtos/request/updateUserRequest.dto';
+import { UserRequestDto } from '../../../modules/user/dtos/request/user-request.dto';
+import { UpdateUserRequestDto } from '../../../modules/user/dtos/request/update-user-request.dto';
 
 @Injectable()
 export class UserRepository extends Repository<UserEntity> {
@@ -19,7 +19,12 @@ export class UserRepository extends Repository<UserEntity> {
     return this.userRepository.find();
   }
   async findUserById(id: number): Promise<UserEntity> {
-    return await this.userRepository.findOne({ where: { id: id } });
+    return await this.userRepository.findOne({
+      where:
+          {
+            id: id
+          }
+    });
   }
 
   async findUserByMail(email: string): Promise<UserEntity> {
@@ -30,19 +35,22 @@ export class UserRepository extends Repository<UserEntity> {
       .getOne();
   }
 
-  async createUser(
-    createUserRequestDto: CreateUserRequestDto,
-  ): Promise<UserEntity> {
-    const user: UserEntity = this.userRepository.create(createUserRequestDto);
+  async createUser(dto: UserRequestDto): Promise<UserEntity> {
+    const user: UserEntity = this.userRepository.create(dto);
     return await this.userRepository.save(user);
   }
 
   async updateUser(
-    updateUserRequestDto: UpdateUserRequestDto,
-    id: number,
+      dto: UpdateUserRequestDto,
+      id: number,
   ): Promise<UserEntity> {
-    await this.userRepository.update(id, updateUserRequestDto);
-    return this.userRepository.findOne({ where: { id: id } });
+    await this.userRepository.update(id, dto);
+    return this.userRepository.findOne({
+      where:
+          {
+            id: id
+          }
+    });
   }
 
   async deleteUser(id: number): Promise<void> {

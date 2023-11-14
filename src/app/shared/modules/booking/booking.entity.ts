@@ -23,11 +23,11 @@ export class BookingEntity {
     deskId: number;
 
     @ManyToOne(() => UserEntity, user => user.bookings)
-    @JoinColumn({ name: "userId" }) // Specify the FK column
+    @JoinColumn({ name: "userId" })
     user: UserEntity;
 
     @ManyToOne(() => DeskEntity, desk => desk.bookings)
-    @JoinColumn({ name: "deskId" }) // Specify the FK column
+    @JoinColumn({ name: "deskId" })
     desk: DeskEntity;
 
 }

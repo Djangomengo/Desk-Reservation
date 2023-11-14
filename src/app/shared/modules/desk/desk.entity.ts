@@ -1,4 +1,4 @@
-import {Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {DeskResponseDto} from "../../../modules/desk/dtos/response/deskResponse.dto";
 import {plainToClass} from "class-transformer";
 import {BookingEntity} from "../booking/booking.entity";
@@ -8,9 +8,6 @@ export class DeskEntity {
 
     @PrimaryGeneratedColumn()
     id: number
-
-    @Column({default: false})
-    taken: boolean
 
     @OneToMany(() => BookingEntity, booking => booking.desk)
     bookings: BookingEntity[];

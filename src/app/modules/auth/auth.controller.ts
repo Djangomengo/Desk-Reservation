@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {Body, Controller, Post, UseGuards} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginRequestDto } from './dtos/request/login-request.dto';
 import { LoginResponseDto } from 'src/app/modules/auth/dtos/response/login-response.dto';
@@ -22,17 +22,18 @@ export class AuthController {
     };
   }
 
+  @Post('change-password')
   @ApiOperation({
     summary: 'change password',
   })
-  @Post('change-password')
   @ApiBody({ type: PasswordChangeRequestDto })
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   async changePassword(
     @CurrentUser() currentUser: UserEntity,
     @Body() dto: PasswordChangeRequestDto,
-  ): Promise<void> {
+  ): Promise<string> {
     await this.authService.changePassword(currentUser.id, dto.newPassword);
+    return 'Password changed'
   }
 }

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { UserTypeormModule } from 'src/app/modules/user/user-typeorm.module';
+import { UserModule } from 'src/app/shared/modules/user/user.module';
 import { UserController } from 'src/app/modules/user/user.controller';
 import { UserService } from 'src/app/modules/user/user.service';
 
 @Module({
-  imports: [UserTypeormModule],
+  imports: [UserModule],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],

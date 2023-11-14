@@ -6,7 +6,7 @@ import { BookingResponseDto } from './dtos/response/bookingResponse.dto';
 import { CurrentUser } from '../../shared/decorators/current-user.decorator';
 import { UserEntity } from '../../shared/modules/user/user.entity';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import { SetDeskAsTakenDto } from '../desk/dtos/request/set-desk-as-taken.dto';
+import { DeskRequestDto } from '../desk/dtos/request/desk-request.dto';
 
 @ApiTags(`booking`)
 @Controller('bookings')

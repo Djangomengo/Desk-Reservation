@@ -11,8 +11,8 @@ import {
 import { UserService } from './user.service';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserResponseDto } from './dtos/response/userResponse.dto';
-import { CreateUserRequestDto } from './dtos/request/createUserRequest.dto';
-import { UpdateUserRequestDto } from './dtos/request/updateUserRequest.dto';
+import { UserRequestDto } from './dtos/request/user-request.dto';
+import { UpdateUserRequestDto } from './dtos/request/update-user-request.dto';
 import { UserEntity } from '../../shared/modules/user/user.entity';
 import { Public } from '../../shared/decorators/is-public.decorator';
 import { CurrentUser } from '../../shared/decorators/current-user.decorator';
@@ -40,9 +40,11 @@ export class UserController {
   @ApiOperation({
     summary: 'Find by id',
   })
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  async findUserById(@Param('id') id: number): Promise<UserResponseDto> {
+  @UseGuards(JwtAuthGuard)
+  async findUserById(
+      @Param('id') id: number
+  ): Promise<UserResponseDto> {
     const entity: UserEntity = await this.userService.findUserById(id);
     return entity.toDto();
   }
@@ -52,9 +54,9 @@ export class UserController {
   @ApiOperation({
     summary: 'Create user',
   })
-  @ApiBody({ type: CreateUserRequestDto })
+  @ApiBody({ type: UserRequestDto })
   async createUser(
-    @Body() createUserRequestDto: CreateUserRequestDto,
+    @Body() createUserRequestDto: UserRequestDto,
   ): Promise<UserResponseDto> {
     const entity: UserEntity =
       await this.userService.createUser(createUserRequestDto);
@@ -65,14 +67,16 @@ export class UserController {
   @ApiOperation({
     summary: 'Update user',
   })
-  @UseGuards(JwtAuthGuard)
+  @ApiBody({type: UserRequestDto})
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   async updateUser(
     @CurrentUser() currentUser: UserEntity,
     @Body() updateUserRequestDto: UpdateUserRequestDto,
   ): Promise<UserResponseDto> {
-    const entity = await this.userService.updateUser(
+    const entity: UserEntity = await this.userService.updateUser(
       updateUserRequestDto,
+
       currentUser.id,
     );
     return entity.toDto();
@@ -82,8 +86,8 @@ export class UserController {
   @ApiOperation({
     summary: 'Delete user',
   })
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   async deleteUser(
     @CurrentUser() currentUser: UserEntity /*@CurrentUser() user: UserEntity*/,
   ): Promise<void> {
