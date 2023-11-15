@@ -8,6 +8,8 @@ import { UserEntity } from '../../shared/modules/user/user.entity';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import { DeskRequestDto } from '../desk/dtos/request/desk-request.dto';
 
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @ApiTags(`booking`)
 @Controller('bookings')
 export class BookingController {
@@ -17,9 +19,10 @@ export class BookingController {
   @ApiOperation({
     summary: `create a reservation`,
   })
-  @ApiBody({ type: CreateBookingRequestDto })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiBody({
+    type: CreateBookingRequestDto
+  })
+
   async createBooking(
     @CurrentUser() currentUser: UserEntity,
     @Body() dto: CreateBookingRequestDto,
@@ -29,8 +32,9 @@ export class BookingController {
       dto.deskId,
       dto.day,
     );
+
     return {
-      message: `booking Created`,
+      message: `booking Created`
     };
   }
 }

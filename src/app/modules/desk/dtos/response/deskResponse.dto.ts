@@ -9,4 +9,7 @@ export class DeskResponseDto {
 
     @Expose()
     message?: string;
+
+    @Expose()
+    data?: any
 }

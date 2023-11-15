@@ -14,6 +14,7 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<string> {
     const user: UserEntity = await this.userService.findUserByEmail(email);
+
     if (!user) {
       this.logger.error('login with wrong email');
       throw new UnauthorizedException('Invalid credentials');
@@ -25,11 +26,13 @@ export class AuthService {
     }
 
     const payload = { username: user.username, id: user.id };
+    this.logger.verbose(`user with id: ${user.id} logged in`)
     return await this.jwtService.signAsync(payload);
   }
 
   async changePassword(id: number, newPassword: string): Promise<void> {
     const user: UserEntity = await this.userService.findUserById(id);
+    this.logger.verbose(`user with id: ${user.id} changed password`)
     user.password = await hashPassword(newPassword);
   }
 }

@@ -15,13 +15,13 @@ export class BookingRepository extends Repository<BookingEntity> {
   }
 
   async findByDayAndDeskId(day: WeekEnum, deskId: number): Promise<boolean> {
-    const count = await this.count({where:
-          {
-            deskId,
-            day
-          }
-    });
-    return count > 0
+    const query = this.createQueryBuilder('booking')
+        .where('booking.deskId = :deskId', {deskId})
+        .andWhere('booking.day = :day', {day})
+        .select('1')
+        .limit(1);
+    const result = await query.getRawOne()
+    return !!result
   }
 
   async findAllByDay(day: WeekEnum): Promise<BookingEntity[]> {

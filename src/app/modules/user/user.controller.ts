@@ -18,8 +18,10 @@ import { Public } from '../../shared/decorators/is-public.decorator';
 import { CurrentUser } from '../../shared/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 
+@ApiBearerAuth()
 @ApiTags('user')
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -27,25 +29,25 @@ export class UserController {
     summary: 'Fetch all users',
   })
   @Get()
-  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  async fetchAll(): Promise<UserResponseDto[]> {
+  async fetchAll(): Promise<UserResponseDto> {
     const entities: UserEntity[] = await this.userService.fetchAll();
-    return entities.map((userEntity) => userEntity.toDto());
+    return {
+      message: 'User Found',
+      data: entities.map((userEntity) => userEntity.toDto()),
+    };
   }
 
   @Get(':id')
   @ApiOperation({
     summary: 'Find by id',
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  async findUserById(
-      @Param('id') id: number
-  ): Promise<UserResponseDto> {
+  async findUserById(@Param('id') id: number): Promise<UserResponseDto> {
     const entity: UserEntity = await this.userService.findUserById(id);
-    return entity.toDto();
+    return {
+      message: 'User Found',
+      data: entity.toDto()
+    };
   }
 
   @Public()
@@ -53,22 +55,24 @@ export class UserController {
   @ApiOperation({
     summary: 'Create user',
   })
-  @ApiBody({ type: UserRequestDto })
-  async createUser(
-    @Body() dto: UserRequestDto,
-  ): Promise<UserResponseDto> {
-    const entity: UserEntity =
-      await this.userService.createUser(dto);
-    return entity.toDto();
+  @ApiBody({
+    type: UserRequestDto,
+  })
+  async createUser(@Body() dto: UserRequestDto): Promise<UserResponseDto> {
+    const entity: UserEntity = await this.userService.createUser(dto);
+    return {
+      message: 'User Found',
+      data: entity.toDto()
+    };
   }
 
   @Put(':id')
   @ApiOperation({
     summary: 'Update user',
   })
-  @ApiBody({type: UserRequestDto})
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @ApiBody({
+    type: UserRequestDto,
+  })
   async updateUser(
     @CurrentUser() currentUser: UserEntity,
     @Body() dto: UpdateUserRequestDto,
@@ -77,19 +81,22 @@ export class UserController {
       dto,
       currentUser.id,
     );
-    return entity.toDto();
+    return {
+      message: 'User Found',
+      data: entity.toDto()
+    };
   }
 
   @Delete(':id')
   @ApiOperation({
     summary: 'Delete user',
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   async deleteUser(
     @CurrentUser() currentUser: UserEntity,
-  ): Promise<string> {
+  ): Promise<UserResponseDto> {
     await this.userService.deleteUser(currentUser.id);
-    return 'successfully deleted'
+    return {
+      message: 'successfully deleted'
+    };
   }
 }

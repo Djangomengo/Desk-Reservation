@@ -10,4 +10,7 @@ export class UserResponseDto {
 
     @Expose()
     id?: string;
+
+    @Expose()
+    data?: any
 }

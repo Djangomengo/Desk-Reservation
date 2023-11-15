@@ -22,17 +22,21 @@ export class UserService {
 
   async findUserById(id: number): Promise<UserEntity> {
     const user: UserEntity = await this.userRepository.findUserById(id);
+
     if (!user) {
       this.throwNotFoundException('Error in findUserById Msg: no user found');
     }
+
     return user;
   }
 
   async findUserByEmail(email: string): Promise<UserEntity> {
     const user: UserEntity = await this.userRepository.findUserByMail(email);
+
     if (!user) {
       this.throwNotFoundException('Error in findUserByEmail Msg: no user found');
     }
+
     return user;
   }
 
@@ -43,27 +47,35 @@ export class UserService {
     if (user) {
       this.throwNotFoundException('Error in createUser Msg: mail already used');
     }
+
     dtoCopy.password = await hashPassword(dtoCopy.password);
     const entity: UserEntity = this.userRepository.create({...dtoCopy});
+    this.logger.verbose(`user with id: ${dtoCopy.email} deleted`);
     return this.userRepository.save(entity);
   }
 
   async updateUser( dto: UpdateUserRequestDto, id: number): Promise<UserEntity> {
     const dtoCopy: UpdateUserRequestDto = structuredClone(dto)
     const user: UserEntity = await this.userRepository.findUserById(id);
+
     if (!user) {
       this.throwNotFoundException('Error in updateUser Msg: user not found');
     }
+
     await this.userRepository.update(id, dtoCopy);
+    this.logger.verbose(`user with id: ${id} updated`);
     return user
   }
 
   async deleteUser(id: number): Promise<void> {
     const user: UserEntity = await this.userRepository.findUserById(id);
+
     if (!user) {
       this.throwNotFoundException( 'Error in deleteUser Msg: user not found');
     }
+
     await this.userRepository.delete(id);
+    this.logger.verbose(`user with id: ${id} deleted`);
   }
 
   throwNotFoundException(errorMsg: string): void {
