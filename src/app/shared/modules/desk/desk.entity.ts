@@ -1,7 +1,7 @@
 import {Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {DeskResponseDto} from "../../../modules/desk/dtos/response/deskResponse.dto";
 import {plainToClass} from "class-transformer";
-import {BookingEntity} from "../booking/booking.entity";
+import {ReservationEntity} from "../reservation/reservation.entity";
 
 @Entity('desk')
 export class DeskEntity {
@@ -9,8 +9,8 @@ export class DeskEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @OneToMany(() => BookingEntity, booking => booking.desk)
-    bookings: BookingEntity[];
+    @OneToMany(() => ReservationEntity, reservation => reservation.desk)
+    reservations: ReservationEntity[];
 
     toDto():DeskResponseDto{
         return plainToClass(DeskResponseDto, this, {

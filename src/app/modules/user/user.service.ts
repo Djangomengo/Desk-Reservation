@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   Logger,
   NotFoundException,
@@ -22,6 +23,9 @@ export class UserService {
 
   async findUserById(id: number): Promise<UserEntity> {
     const user: UserEntity = await this.userRepository.findUserById(id);
+    if(!(typeof id === 'number') ){
+      throw new BadRequestException(`invalid id format. id must be a number.`)
+    }
 
     if (!user) {
       this.throwNotFoundException('Error in findUserById Msg: no user found');
@@ -50,7 +54,7 @@ export class UserService {
 
     dtoCopy.password = await hashPassword(dtoCopy.password);
     const entity: UserEntity = this.userRepository.create({...dtoCopy});
-    this.logger.verbose(`user with id: ${dtoCopy.email} deleted`);
+    this.logger.verbose(`user with email: ${dtoCopy.email} created`);
     return this.userRepository.save(entity);
   }
 

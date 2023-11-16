@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import {DeskModule} from "../../shared/modules/desk/desk.module";
 import {DeskController} from "./desk.controller";
 import {DeskService} from "./desk.service";
-import {BookingModule} from "../../shared/modules/booking/booking.module";
+import {ReservationModule} from "../../shared/modules/reservation/reservation.module";
 
 @Module({
-    imports: [DeskModule, BookingModule],
+    imports: [DeskModule, ReservationModule],
     controllers: [DeskController],
     providers: [DeskService],
     exports: [DeskService]

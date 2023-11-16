@@ -7,7 +7,7 @@ import { getDatabaseConfig } from './shared/database/database.config';
 import { UserHttpModule } from './modules/user/user-http.module';
 import { AuthHttpModule } from './modules/auth/auth-http.module';
 import { DeskHttpModule } from './modules/desk/desk-http.module';
-import { BookingHttpModule } from './modules/booking/booking-http.module';
+import {ReservationHttpModule} from "./modules/reservation/reservation-http.module";
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { BookingHttpModule } from './modules/booking/booking-http.module';
     UserHttpModule,
     AuthHttpModule,
     DeskHttpModule,
-    BookingHttpModule,
+    ReservationHttpModule,
   ],
   controllers: [AppController],
   providers: [AppService],

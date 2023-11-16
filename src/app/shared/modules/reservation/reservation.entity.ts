@@ -3,10 +3,10 @@ import {WeekEnum} from "../../enums/week.enum";
 import {UserEntity} from "../user/user.entity";
 import {DeskEntity} from "../desk/desk.entity";
 
-@Entity('booking')
+@Entity('reservation')
 @Unique(['userId', "day"])
 @Unique(['deskId', "day"])
-export class BookingEntity {
+export class ReservationEntity {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -22,11 +22,11 @@ export class BookingEntity {
     @Column()
     deskId: number;
 
-    @ManyToOne(() => UserEntity, user => user.bookings)
+    @ManyToOne(() => UserEntity, user => user.reservation,{onDelete: 'CASCADE'})
     @JoinColumn({ name: "userId" })
     user: UserEntity;
 
-    @ManyToOne(() => DeskEntity, desk => desk.bookings)
+    @ManyToOne(() => DeskEntity, desk => desk.reservations,{onDelete: 'CASCADE'})
     @JoinColumn({ name: "deskId" })
     desk: DeskEntity;
 

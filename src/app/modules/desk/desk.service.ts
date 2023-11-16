@@ -1,21 +1,17 @@
-import {Injectable, Logger, NotFoundException} from '@nestjs/common';
-//import {DeskRepository} from '../../shared/modules/desk/desk.repository';
+import {BadRequestException, Injectable, Logger, NotFoundException} from '@nestjs/common';
 import {DeskEntity} from '../../shared/modules/desk/desk.entity';
-import {BookingRepository} from "../../shared/modules/booking/booking.repository";
 import {WeekEnum} from "../../shared/enums/week.enum";
-import {In, Not, Repository} from "typeorm";
-import {BookingEntity} from "../../shared/modules/booking/booking.entity";
+import {In, Not} from "typeorm";
 import {DeskRepository} from "../../shared/modules/desk/desk.repository";
-import {InjectRepository} from "@nestjs/typeorm";
+import {ReservationRepository} from "../../shared/modules/reservation/reservation.repository";
+import {ReservationEntity} from "../../shared/modules/reservation/reservation.entity";
 
 @Injectable()
 export class DeskService {
   private logger: Logger = new Logger(DeskService.name)
   constructor(
       private readonly deskRepository: DeskRepository,
-      //@InjectRepository(DeskEntity)
-      //private readonly repository: Repository<DeskEntity>,
-      private readonly bookingRepository: BookingRepository
+      private readonly reservation: ReservationRepository
   ) {}
 
   async createDesk(): Promise<DeskEntity> {
@@ -30,8 +26,23 @@ export class DeskService {
     }
 
     this.logger.verbose(`Free desk's fetched`)
-    const bookingsOnDay: BookingEntity[] = await this.bookingRepository.findAllByDay(day);
-    const bookedDeskIds: number[] = bookingsOnDay.map((booking) => booking.deskId);
+    const bookingsOnDay: ReservationEntity[] = await this.reservation.findAllByDay(day);
+    const bookedDeskIds: number[] = bookingsOnDay.map((reservation) => reservation.deskId);
     return this.deskRepository.find({ where: {id: Not(In(bookedDeskIds))}});
+  }
+
+  async deleteDesk(id: number): Promise<void>{
+    if(!(typeof id === 'number') ){
+      throw new BadRequestException(`invalid id format. id must be a number.`)
+    }
+
+    const desk: DeskEntity = await this.deskRepository.findOne({where: { id:id }})
+    if(!desk){
+      this.logger.error('deleteDesk err: no such id found')
+      throw new NotFoundException(`no desk with id: ${id}` )
+    }
+
+    await this.deskRepository.delete(id)
+    this.logger.verbose(`desk with id: ${id} deleted`)
   }
 }
