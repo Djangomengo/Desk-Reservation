@@ -10,11 +10,14 @@ export class ReservationEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({
-        type: "varchar",
-        enum: WeekEnum,
-    })
-    day: WeekEnum;
+    // @Column({
+    //     type: "varchar",
+    //     enum: WeekEnum,
+    // })
+    // day: WeekEnum;
+
+    @Column({type: "date"})
+    day: Date;
 
     @Column()
     userId: number;

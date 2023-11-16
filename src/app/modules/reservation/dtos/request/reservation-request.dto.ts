@@ -1,13 +1,16 @@
 import { WeekEnum } from 'src/app/shared/enums/week.enum';
 import { ApiProperty } from '@nestjs/swagger';
-import {IsEnum, IsNotEmpty, IsString} from 'class-validator';
+import {IsDate, IsDateString, IsEnum, IsNotEmpty, IsString} from 'class-validator';
 
 export class reservationRequestDto {
-  @ApiProperty({ enum: WeekEnum, description: 'day', required: true })
-  @IsString()
-  @IsEnum(WeekEnum)
+  @ApiProperty({
+    description: 'date in YYYY-MM-DD format',
+    required: true,
+    format: 'date',
+  })
+  @IsDateString()
   @IsNotEmpty()
-  day: WeekEnum;
+  day: string; // YYYY-MM-DD
 
   @ApiProperty({ description: 'desk', required: true })
   @IsNotEmpty()

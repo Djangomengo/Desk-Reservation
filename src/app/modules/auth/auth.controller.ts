@@ -22,7 +22,8 @@ import {Public} from "../../shared/decorators/is-public.decorator";
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {
+  }
 
   @Public()
   @Post()
@@ -38,7 +39,7 @@ export class AuthController {
   })
   @ApiBadRequestResponse({
     description: 'check your inputs'
-      })
+  })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error'
   })

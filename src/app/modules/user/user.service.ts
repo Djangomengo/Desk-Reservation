@@ -24,34 +24,32 @@ export class UserService {
   async findUserById(id: number): Promise<UserEntity> {
     const user: UserEntity = await this.userRepository.findUserById(id);
     if(!(typeof id === 'number') ){
+      this.logger.error(`BadRequestException: Invalid ID format received. Expected a number. Received ID: ${id}. Function: [FunctionName].`);
       throw new BadRequestException(`invalid id format. id must be a number.`)
     }
-
     if (!user) {
+      this.logger.error(`NotFoundException: No user found in findUserById. Function: findUserById.`);
       this.throwNotFoundException('Error in findUserById Msg: no user found');
     }
-
     return user;
   }
 
   async findUserByEmail(email: string): Promise<UserEntity> {
     const user: UserEntity = await this.userRepository.findUserByMail(email);
-
     if (!user) {
+      this.logger.error(`NotFoundException: No user found in findUserByEmail. Function: findUserByEmail.`);
       this.throwNotFoundException('Error in findUserByEmail Msg: no user found');
     }
-
     return user;
   }
 
   async createUser(dto: UserRequestDto): Promise<UserEntity> {
     const dtoCopy: UserRequestDto = structuredClone(dto);
     const user: UserEntity = await this.userRepository.findUserByMail(dtoCopy.email);
-
     if (user) {
+      this.logger.error(`NotFoundException: Email already used in createUser. Function: createUser.`);
       this.throwNotFoundException('Error in createUser Msg: mail already used');
     }
-
     dtoCopy.password = await hashPassword(dtoCopy.password);
     const entity: UserEntity = this.userRepository.create({...dtoCopy});
     this.logger.verbose(`user with email: ${dtoCopy.email} created`);
@@ -61,11 +59,10 @@ export class UserService {
   async updateUser( dto: UpdateUserRequestDto, id: number): Promise<UserEntity> {
     const dtoCopy: UpdateUserRequestDto = structuredClone(dto)
     const user: UserEntity = await this.userRepository.findUserById(id);
-
     if (!user) {
+      this.logger.error(`NotFoundException: User not found in updateUser. Function: updateUser.`);
       this.throwNotFoundException('Error in updateUser Msg: user not found');
     }
-
     await this.userRepository.update(id, dtoCopy);
     this.logger.verbose(`user with id: ${id} updated`);
     return user
@@ -73,11 +70,10 @@ export class UserService {
 
   async deleteUser(id: number): Promise<void> {
     const user: UserEntity = await this.userRepository.findUserById(id);
-
     if (!user) {
+      this.logger.error(`NotFoundException: User not found in deleteUser. Function: deleteUser.`);
       this.throwNotFoundException( 'Error in deleteUser Msg: user not found');
     }
-
     await this.userRepository.delete(id);
     this.logger.verbose(`user with id: ${id} deleted`);
   }

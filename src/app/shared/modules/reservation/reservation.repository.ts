@@ -14,21 +14,34 @@ export class ReservationRepository extends Repository<ReservationEntity> {
     super(ReservationEntity, entityManager);
   }
 
-  async findByDayAndDeskId(day: WeekEnum, deskId: number): Promise<boolean> {
+  async findByDayAndDeskId(day: Date, deskId: number): Promise<boolean> {
     const query = this.createQueryBuilder('reservation')
         .where('reservation.deskId = :deskId', {deskId})
-        .andWhere('reservation.day = :day', {day})
+        .andWhere('reservation.day = :day', {
+          day: day.toISOString().split('T'[0])})
         .select('1')
         .limit(1);
     const result = await query.getRawOne()
     return !!result
   }
 
-  async findAllByDay(day: WeekEnum): Promise<ReservationEntity[]> {
+  async findByUserIdAndDay(day: Date, userId: number): Promise<boolean> {
+    const query = this.createQueryBuilder('reservation')
+        .where('reservation.userId = :userId', {userId})
+        .andWhere('reservation.day = :day', {
+          day: day.toISOString().split('T'[0])})
+        .select('1')
+        .limit(1);
+    const result = await query.getRawOne()
+    return !!result
+  }
+
+  async findAllByDay(day: Date): Promise<ReservationEntity[]> {
     return this.reservationRepository
         .createQueryBuilder('reservation')
         .select('reservation.deskId')
-        .where('reservation.day = :day', {day})
+        .where('reservation.day = :day', {
+          day: day.toISOString().split('T'[0])})
         .getMany();
   }
 

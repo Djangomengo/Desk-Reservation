@@ -16,12 +16,12 @@ export class AuthService {
     const user: UserEntity = await this.userService.findUserByEmail(email);
 
     if (!user) {
-      this.logger.error('login with wrong email');
+      this.logger.error(`UnauthorizedException: User with email ${email} not found. Function: login.`);
       throw new UnauthorizedException('Invalid credentials');
     }
 
     if (!(await user.validatePassword(password))) {
-      this.logger.error('login with wrong password');
+      this.logger.error( `UnauthorizedException: User with email ${email} enter wrong password. Function: login.`);
       throw new UnauthorizedException('Invalid credentials');
     }
 

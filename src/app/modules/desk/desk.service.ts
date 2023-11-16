@@ -20,9 +20,11 @@ export class DeskService {
     return this.deskRepository.save(desk);
   }
 
-  async fetchFreeDesks(day: WeekEnum): Promise<DeskEntity[]> {
-    if(!(day in WeekEnum) ) {
-      throw new NotFoundException('provided day not comprehend ')
+  async fetchFreeDesks(dayStr: string): Promise<DeskEntity[]> {
+    const day: Date = new Date(dayStr)
+    if(isNaN(day.getTime())){
+      this.logger.error(`BadRequestException: Invalid date format received. Expected format: YYYY-MM-DD. Function: createReservation.`);
+      throw new BadRequestException('Invalid date. Pleas use YYYY-MM-DD.')
     }
 
     this.logger.verbose(`Free desk's fetched`)
@@ -33,12 +35,13 @@ export class DeskService {
 
   async deleteDesk(id: number): Promise<void>{
     if(!(typeof id === 'number') ){
+      this.logger.error(`BadRequestException: Invalid ID format received. Expected a number. Received ID: ${id}. Function: deleteDesk.`);
       throw new BadRequestException(`invalid id format. id must be a number.`)
     }
 
     const desk: DeskEntity = await this.deskRepository.findOne({where: { id:id }})
     if(!desk){
-      this.logger.error('deleteDesk err: no such id found')
+      this.logger.error(`NotFoundException: No desk found with provided ID. Received ID: ${id}. Function: deleteDesk.`);
       throw new NotFoundException(`no desk with id: ${id}` )
     }
 
