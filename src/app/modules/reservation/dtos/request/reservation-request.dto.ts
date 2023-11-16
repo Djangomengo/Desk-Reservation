@@ -1,6 +1,5 @@
-import { WeekEnum } from 'src/app/shared/enums/week.enum';
 import { ApiProperty } from '@nestjs/swagger';
-import {IsDate, IsDateString, IsEnum, IsNotEmpty, IsString} from 'class-validator';
+import {IsDateString, IsNotEmpty} from 'class-validator';
 
 export class reservationRequestDto {
   @ApiProperty({

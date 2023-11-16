@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager, Repository } from 'typeorm';
 import { ReservationEntity } from './reservation.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { WeekEnum } from '../../enums/week.enum';
 
 @Injectable()
 export class ReservationRepository extends Repository<ReservationEntity> {

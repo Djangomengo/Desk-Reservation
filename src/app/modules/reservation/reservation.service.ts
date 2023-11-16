@@ -1,13 +1,11 @@
 import {
   BadRequestException,
-  ConflictException, Delete,
-  Injectable, Logger, NotFoundException, Param,
+  ConflictException,
+  Injectable, Logger, NotFoundException,
 } from '@nestjs/common';
-import { WeekEnum } from '../../shared/enums/week.enum';
 import {DeleteResult} from "typeorm";
 import {ReservationRepository} from "../../shared/modules/reservation/reservation.repository";
 import {ReservationEntity} from "../../shared/modules/reservation/reservation.entity";
-import {timestamp} from "rxjs";
 
 @Injectable()
 export class ReservationService {

@@ -10,7 +10,6 @@ import {
 import { DeskResponseDto } from './dtos/response/deskResponse.dto';
 import { DeskEntity } from '../../shared/modules/desk/desk.entity';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import {WeekEnum} from "../../shared/enums/week.enum";
 import {UserResponseDto} from "../user/dtos/response/userResponse.dto";
 
 @ApiBearerAuth()
@@ -57,7 +56,7 @@ export class DeskController {
   @ApiNoContentResponse({
     description: 'no desks to fetch'
   })
-  async fetchFreeDesks(@Query('day') day: WeekEnum): Promise<DeskResponseDto> {
+  async fetchFreeDesks(@Query('day') day: string): Promise<DeskResponseDto> {
     const desks: DeskEntity[] = await this.deskService.fetchFreeDesks(day);
     return {
       message: 'Free desks found',

@@ -1,5 +1,5 @@
 import {ConfigService} from "@nestjs/config";
-import {TypeOrmModule, TypeOrmModuleOptions} from "@nestjs/typeorm";
+import {TypeOrmModuleOptions} from "@nestjs/typeorm";
 import * as process from "process";
 
 export const  getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOptions =>
@@ -19,4 +19,3 @@ export const  getDatabaseConfig = (configService: ConfigService): TypeOrmModuleO
     // Wenn du in der Zukunft Entitäten in anderen Ordnern hinzufügst, musst du diesen Pfad hier aktualisieren.
     entities: [__dirname + '/../../shared/modules/**/*.entity{.ts,.js}']})
 
-//DATENBANK AUFBAUEN UND VERBINDEN

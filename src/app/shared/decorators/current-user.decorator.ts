@@ -1,6 +1,6 @@
-import {createParamDecorator, ExecutionContext, Logger, SetMetadata} from '@nestjs/common';
+import {createParamDecorator, ExecutionContext, Logger} from '@nestjs/common';
 export const CurrentUser = createParamDecorator(
-    (data: unknown, ctx: ExecutionContext) => {
+    (ctx: ExecutionContext) => {
         Logger.verbose(`@CurrentUser decorator used`)
 
         const request = ctx.switchToHttp().getRequest();

@@ -1,6 +1,5 @@
 import {BadRequestException, Injectable, Logger, NotFoundException} from '@nestjs/common';
 import {DeskEntity} from '../../shared/modules/desk/desk.entity';
-import {WeekEnum} from "../../shared/enums/week.enum";
 import {In, Not} from "typeorm";
 import {DeskRepository} from "../../shared/modules/desk/desk.repository";
 import {ReservationRepository} from "../../shared/modules/reservation/reservation.repository";

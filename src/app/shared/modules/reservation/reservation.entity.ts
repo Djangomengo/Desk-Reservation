@@ -1,5 +1,4 @@
 import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {WeekEnum} from "../../enums/week.enum";
 import {UserEntity} from "../user/user.entity";
 import {DeskEntity} from "../desk/desk.entity";
 
