@@ -1,14 +1,15 @@
 import {Expose} from "class-transformer";
 
-export class DeskResponseDto {
-    @Expose()
-    id?: number;
+export class UserResponseDto {
 
     @Expose()
-    taken?: boolean;
+    readonly message?: string;
 
     @Expose()
-    message?: string;
+    username?: string;
+
+    @Expose()
+    id?: string;
 
     @Expose()
     data?: any
