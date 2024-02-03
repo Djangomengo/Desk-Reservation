@@ -8,6 +8,7 @@ import { UserResponseDto } from '../../../modules/user/dtos/response/userRespons
 import { plainToClass } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import {ReservationEntity} from "../reservation/reservation.entity";
+import {UserRolesEnum} from "../../../modules/auth/enums/user-roles.enum";
 
 @Entity('users')
 export class UserEntity {
@@ -32,6 +33,13 @@ export class UserEntity {
   @OneToMany(() => ReservationEntity, (reservation) => reservation.user, {
   })
   reservation: ReservationEntity[];
+
+  @Column({
+    type: 'enum',
+    enum: UserRolesEnum,
+    default: UserRolesEnum.USER
+  })
+  role: UserRolesEnum
 
   async validatePassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password);

@@ -4,6 +4,7 @@ import {In, Not} from "typeorm";
 import {DeskRepository} from "../../shared/modules/desk/desk.repository";
 import {ReservationRepository} from "../../shared/modules/reservation/reservation.repository";
 import {ReservationEntity} from "../../shared/modules/reservation/reservation.entity";
+import {isNumber} from "class-validator";
 
 @Injectable()
 export class DeskService {
@@ -33,7 +34,10 @@ export class DeskService {
   }
 
   async deleteDesk(id: number): Promise<void>{
-    if(!(typeof id === 'number') ){
+
+    console.log(isNumber(id))
+
+    if( !isNumber(id) ){
       this.logger.error(`BadRequestException: Invalid ID format received. Expected a number. Received ID: ${id}. Function: deleteDesk.`);
       throw new BadRequestException(`invalid id format. id must be a number.`)
     }
