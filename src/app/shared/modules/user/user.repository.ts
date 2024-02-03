@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {ConflictException, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, EntityManager } from 'typeorm';
+import {Repository, EntityManager, createQueryBuilder} from 'typeorm';
 import { UserEntity } from './user.entity';
 import { UserRequestDto } from '../../../modules/user/dtos/request/user-request.dto';
 import { UpdateUserRequestDto } from '../../../modules/user/dtos/request/update-user-request.dto';
+import {isNumber} from "class-validator";
+import {UserRolesEnum} from "../../../modules/auth/enums/user-roles.enum";
 
 @Injectable()
 export class UserRepository extends Repository<UserEntity> {
@@ -32,4 +34,19 @@ export class UserRepository extends Repository<UserEntity> {
       .getOne();
   }
 
+  async promoteUserToAdmin(id: number): Promise<void>{
+    await this.createQueryBuilder()
+        .update(UserEntity)
+        .set({role: UserRolesEnum.ADMIN})
+        .where('id = :id', {id})
+        .execute()
+  }
+
+  async revokeAdminPrivileges(id: number): Promise<void>{
+    await this.createQueryBuilder()
+        .update(UserEntity)
+        .set({role: UserRolesEnum.USER})
+        .where('id = :id', {id})
+        .execute()
+  }
 }

@@ -72,10 +72,11 @@ export class DeskController {
   @ApiOperation({ summary: 'Delete desk' })
   @ApiInternalServerErrorResponse({ description: 'internal server error' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized access.' })
-  @ApiForbiddenResponse({ description: 'Missing privileges' })
+  @ApiForbiddenResponse({ description: 'Forbidden resource' })
   @UseGuards(RolesGuard)
   @Roles(UserRolesEnum.ADMIN)
   async deleteDesk(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.deskService.deleteDesk(id);
   }
 }
+
