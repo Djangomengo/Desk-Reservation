@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
+import {IsString, IsEmail, IsNotEmpty, IsEnum} from 'class-validator';
+import {UserRolesEnum} from "../../../auth/enums/user-roles.enum";
 
 export class UserRequestDto {
   @ApiProperty({ description: 'first name', required: true })
@@ -27,4 +28,9 @@ export class UserRequestDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
+
+  @ApiProperty({description: 'user role', required: true})
+  @IsNotEmpty()
+  @IsEnum(UserRolesEnum, {message: 'role must be a validate UserRolesEnum value'})
+  role: UserRolesEnum
 }
